@@ -7,10 +7,10 @@
     "node": "18.x"
   },
   "scripts": {
-    "dev": "vite",
-    "build": "npm install && vite build",
-    "preview": "vite preview --host",
-    "start": "vite preview --host"
+    "dev": "npx vite",
+    "build": "npm install && npx vite build",
+    "preview": "npx vite preview --host",
+    "start": "npx vite preview --host"
   },
   "dependencies": {
     "react": "^18.2.0",
