@@ -7,16 +7,16 @@
     "node": "18.x"
   },
   "scripts": {
-    "dev": "npx vite",
-    "build": "npm install && npx vite build",
-    "preview": "npx vite preview --host",
-    "start": "npx vite preview --host"
+    "dev": "vite",
+    "build": "npm install && vite build",
+    "start": "node server.js"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.1",
-    "axios": "^1.6.7"
+    "axios": "^1.6.7",
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
