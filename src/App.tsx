@@ -6,12 +6,12 @@ import './App.css';
 function App() {
   return (
     <Router>
-        <Routes>
-          <Route path="/dash" element={<PharmacyDashboard />} />
-          <Route path="/form" element={<PharmacyForm />} />
-          <Route path="/" element={<Navigate to="/dash" replace />} />
-        </Routes>
-   
+      <Routes>
+        <Route path="/dash" element={<PharmacyDashboard />} />
+        <Route path="/form" element={<PharmacyForm />} />
+        {/* Rediriger la racine vers /dash */}
+        <Route path="/" element={<Navigate to="/dash" replace />} />
+      </Routes>
     </Router>
   );
 }
