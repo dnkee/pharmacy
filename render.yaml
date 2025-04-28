@@ -12,13 +12,16 @@ services:
       - key: MONGODB_URI
         value: mongodb+srv://user:user@cluster83783.o4fhg.mongodb.net/pharmacy?retryWrites=true&w=majority&appName=Cluster83783
 
-  - type: static
+  - type: web
     name: pharmacy-frontend
+    env: node
     buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    startCommand: npm run preview
     envVars:
       - key: VITE_API_URL
         value: https://pharmacy-request-backend.onrender.com
+      - key: PORT
+        value: 3000
     routes:
       - type: rewrite
         source: /(.*)
