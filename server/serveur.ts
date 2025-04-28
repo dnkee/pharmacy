@@ -96,15 +96,6 @@ app.delete('/api/requests/:id', async (req: Request, res: Response) => {
   }
 });
 
-// Servir les fichiers statiques en production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../dist')));
-  
-  app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));
-  });
-}
-
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
