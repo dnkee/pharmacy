@@ -5,12 +5,12 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/">
       <Routes>
         <Route path="/dash" element={<PharmacyDashboard />} />
         <Route path="/form" element={<PharmacyForm />} />
-        {/* Rediriger la racine vers /dash */}
         <Route path="/" element={<Navigate to="/dash" replace />} />
+        <Route path="*" element={<Navigate to="/dash" replace />} />
       </Routes>
     </Router>
   );
