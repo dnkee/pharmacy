@@ -3,9 +3,11 @@ services:
     name: pharmacy-request
     env: node
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    startCommand: npm run preview
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3000 
+        value: 3000
+      - key: VITE_API_URL
+        value: https://your-api-url.com 
