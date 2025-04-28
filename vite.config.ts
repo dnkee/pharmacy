@@ -1,12 +1,10 @@
-// @ts-nocheck
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
-import { fileURLToPath } from 'url'
-import path from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = resolve(__filename, '..'); // Utilisation de resolve ici au lieu de path.dirname
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -38,4 +36,4 @@ export default defineConfig({
       '@': resolve(__dirname, './src')
     }
   }
-})
+});
