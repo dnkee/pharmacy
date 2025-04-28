@@ -8,13 +8,9 @@
   },
   "scripts": {
     "dev": "vite",
-<<<<<<< HEAD
     "build": "npm install && vite build",
-    "start": "npm install && vite preview --host"
-=======
-    "build": "npm install && npx vite build",
-    "start": "npx vite preview --host"
->>>>>>> 5b4b1cf (d)
+    "preview": "vite preview --host",
+    "start": "vite preview --host"
   },
   "dependencies": {
     "react": "^18.2.0",
