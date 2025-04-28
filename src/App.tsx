@@ -5,7 +5,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router basename="">
+    <Router basename="/">
       <div className="App">
         <Routes>
           <Route path="/dash" element={<PharmacyDashboard />} />
