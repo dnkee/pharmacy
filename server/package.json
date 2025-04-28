@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node dist/serveur.js",
-    "build": "tsc && cp -r src/* dist/",
+    "build": "tsc",
     "dev": "ts-node serveur.ts"
   },
   "dependencies": {
