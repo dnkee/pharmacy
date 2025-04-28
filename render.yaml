@@ -21,11 +21,5 @@ services:
         value: https://pharmacy-request-backend.onrender.com
     routes:
       - type: rewrite
-        source: /dash
-        destination: /index.html
-      - type: rewrite
-        source: /form
-        destination: /index.html
-      - type: rewrite
-        source: /*
+        source: /(.*)
         destination: /index.html 
