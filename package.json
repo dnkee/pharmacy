@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "start": "vite preview --host"
+    "build": "npm install && vite build",
+    "start": "npm install && vite preview --host"
   },
   "dependencies": {
     "react": "^18.2.0",
