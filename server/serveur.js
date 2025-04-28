@@ -96,7 +96,7 @@ app.delete('/api/requests/:id', async (req, res) => {
 // Servir les fichiers statiques de React depuis le dossier dist
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Pour toutes les autres routes, renvoyer index.html de React
+// Pour toutes les autres routes, renvoyer index.html de React dfdf
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
