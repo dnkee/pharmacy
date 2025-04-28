@@ -55,7 +55,7 @@ function PharmacyDashboard() {
 
   const handleValidate = async (requestId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/requests/${requestId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests/${requestId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ function PharmacyDashboard() {
       }
 
       // Rafraîchir la liste des demandes
-      const updatedResponse = await fetch('http://localhost:3001/api/requests');
+      const updatedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
       const updatedData = await updatedResponse.json();
       setRequests(updatedData);
     } catch (err) {
@@ -80,7 +80,7 @@ function PharmacyDashboard() {
   const handleRemove = async (requestId: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir retirer cette demande ?')) {
       try {
-        const response = await fetch(`http://localhost:3001/api/requests/${requestId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests/${requestId}`, {
           method: 'DELETE',
         });
 
@@ -89,7 +89,7 @@ function PharmacyDashboard() {
         }
 
         // Rafraîchir la liste des demandes
-        const updatedResponse = await fetch('http://localhost:3001/api/requests');
+        const updatedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
         const updatedData = await updatedResponse.json();
         setRequests(updatedData);
       } catch (err) {
@@ -104,7 +104,7 @@ function PharmacyDashboard() {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch('http://localhost:3001/api/requests');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des données');
         }
