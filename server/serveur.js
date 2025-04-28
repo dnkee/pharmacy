@@ -6,16 +6,30 @@ const app = express();
 app.use(express.json());
 app.use(cors()); 
 app.use(express.static("public"));
-const port = 3000;
+const port = 3001;
 
-// 🔌 Connexion à MongoDB
-mongoose.connect('mongodb+srv://user:user@cluster83783.o4fhg.mongodb.net/pharmacy?retryWrites=true&w=majority&appName=Cluster83783')
-  .then(() => {
-    console.log('✅ Connecté à MongoDB Atlas');
-  })
-  .catch((err) => {
-    console.error('❌ Erreur de connexion à MongoDB Atlas :', err);
+// Configuration MongoDB Atlas
+const MONGODB_URI = 'mongodb+srv://user:user@cluster83783.o4fhg.mongodb.net/pharmacy?retryWrites=true&w=majority&appName=Cluster83783';
+
+// 🔌 Connexion à MongoDB avec options de configuration
+mongoose.connect(MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000, // Timeout après 5 secondes
+  socketTimeoutMS: 45000, // Timeout socket après 45 secondes
+})
+.then(() => {
+  console.log('✅ Connecté à MongoDB Atlas');
+  // Démarrer le serveur seulement après la connexion à la base de données
+  app.listen(port, () => {
+    console.log(`Serveur démarré sur le port ${port}`);
   });
+})
+.catch((err) => {
+  console.error('❌ Erreur de connexion à MongoDB Atlas :');
+  console.error('Message:', err.message);
+  if (err.code) console.error('Code:', err.code);
+  if (err.name) console.error('Name:', err.name);
+  process.exit(1); // Arrêter le serveur si pas de connexion à la base de données
+});
 
 // Schéma pour les demandes de médicaments
 const requestSchema = new mongoose.Schema({
@@ -71,8 +85,4 @@ app.delete('/api/requests/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Serveur démarré sur le port ${port}`);
 }); 
