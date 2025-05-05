@@ -8,8 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm install && npm run build:vite",
-    "build:vite": "npx vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -23,7 +22,6 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.15.3",
     "@types/react": "^18.2.55",
     "@types/react-dom": "^18.2.19",
