@@ -21,7 +21,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'https://pharmacy-request-backend.onrender.com',
+        target: 'https://pharmacy-backend-cyq7.onrender.com',
         changeOrigin: true,
         secure: true
       }
