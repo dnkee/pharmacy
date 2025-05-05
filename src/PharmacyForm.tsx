@@ -91,7 +91,7 @@ const PharmacyForm = () => {
 
         <div className="form-group">
           <label>
-            Dosage
+            Dosage / Forme
           </label>
           <input
             type="text"
@@ -99,6 +99,7 @@ const PharmacyForm = () => {
             value={formData.dosage}
             onChange={handleChange}
             required
+            placeholder="ex: 500mg / comprimé"
           />
         </div>
 

@@ -173,7 +173,7 @@ function PharmacyDashboard() {
         <div className="requests-header">
           <div>Nom du patient</div>
           <div>Email</div>
-          <div>Dosage</div>
+          <div>Dosage / Forme</div>
           <div>Médicament</div>
           <div>Téléphone</div>
           <div>Urgence</div>
