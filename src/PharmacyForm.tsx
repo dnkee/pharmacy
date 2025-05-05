@@ -73,6 +73,7 @@ const PharmacyForm = () => {
             value={formData.patientName}
             onChange={handleChange}
             required
+            placeholder="ex: Jean Dupont"
           />
         </div>
 
@@ -86,6 +87,7 @@ const PharmacyForm = () => {
             value={formData.medicationName}
             onChange={handleChange}
             required
+            placeholder="ex: Paracétamol"
           />
         </div>
 
@@ -113,6 +115,7 @@ const PharmacyForm = () => {
             value={formData.patientEmail}
             onChange={handleChange}
             required
+            placeholder="ex: jean.dupont@email.com"
           />
         </div>
 
@@ -126,6 +129,7 @@ const PharmacyForm = () => {
             value={formData.patientPhone}
             onChange={handleChange}
             required
+            placeholder="ex: 06 12 34 56 78"
           />
         </div>
 
@@ -152,6 +156,7 @@ const PharmacyForm = () => {
             name="notes"
             value={formData.notes}
             onChange={handleChange}
+            placeholder="ex: Allergie à la pénicilline, traitement en cours..."
           />
         </div>
 
