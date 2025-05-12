@@ -51,18 +51,6 @@ const transporter = nodemailer.createTransport({
 
 // Fonction pour envoyer l'email de confirmation
 const sendConfirmationEmail = async (email: string, patientName: string, medicationName: string) => {
-  console.log('Tentative d\'envoi d\'email à:', email);
-  console.log('Utilisation des identifiants:', {
-    user: process.env.EMAIL_USER ? 'Configuré' : 'Non configuré',
-    pass: process.env.EMAIL_PASSWORD ? 'Configuré' : 'Non configuré'
-  });
-  
-  // Vérifier si les variables d'environnement sont définies
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-    console.error('Les identifiants email ne sont pas configurés');
-    return;
-  }
-  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -80,13 +68,10 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
   };
 
   try {
-    console.log('Envoi de l\'email en cours...');
     await transporter.sendMail(mailOptions);
     console.log('Email de confirmation envoyé avec succès');
-    return true;
   } catch (error) {
     console.error('Erreur lors de l\'envoi de l\'email:', error);
-    return false;
   }
 };
 
@@ -116,50 +101,20 @@ app.post('/api/requests', async (req: ExpressRequest, res: Response) => {
 // Route pour mettre à jour le statut d'une demande
 app.put('/api/requests/:id', async (req: ExpressRequest, res: Response) => {
   try {
-    console.log('Mise à jour de la demande:', req.params.id);
-    console.log('Données reçues:', req.body);
-    
     const request = await Request.findById(req.params.id);
     if (!request) {
-      console.log('Demande non trouvée:', req.params.id);
       return res.status(404).json({ message: 'Demande non trouvée' });
     }
 
     request.status = req.body.status;
     await request.save();
-    console.log('Demande mise à jour avec succès, statut:', request.status);
 
     // Si la demande est validée, envoyer l'email de confirmation
-    if (req.body.status === 'validated') {
-      console.log('Tentative d\'envoi d\'email pour la demande validée');
-      
-      if (!request.patientEmail) {
-        console.error('Email du patient manquant');
-        return res.status(400).json({ message: 'Email du patient manquant, impossible d\'envoyer l\'email' });
-      }
-      
-      try {
-        const emailSent = await sendConfirmationEmail(
-          request.patientEmail, 
-          request.patientName || 'Patient', 
-          request.medicationName || 'Médicament demandé'
-        );
-        
-        if (emailSent) {
-          console.log('Email envoyé avec succès');
-        } else {
-          console.warn('L\'email n\'a pas pu être envoyé');
-        }
-      } catch (emailError) {
-        console.error('Erreur lors de l\'envoi de l\'email:', emailError);
-        // On continue malgré l'erreur d'email
-      }
+    if (req.body.status === 'validated' && request.patientEmail && request.patientName && request.medicationName) {
+      await sendConfirmationEmail(request.patientEmail, request.patientName, request.medicationName);
     }
 
-    res.json({ 
-      message: 'Demande mise à jour avec succès',
-      request: request 
-    });
+    res.json(request);
   } catch (error) {
     console.error('Erreur lors de la mise à jour:', error);
     res.status(500).json({ message: 'Erreur lors de la mise à jour de la demande' });
