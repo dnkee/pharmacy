@@ -2,9 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'
 
+interface FormData {
+  patientName: string;
+  medicationName: string;
+  dosage: string;
+  patientEmail: string;
+  patientPhone: string;
+  urgency: string;
+  notes: string;
+}
+
 const PharmacyForm = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     patientName: '',
     medicationName: '',
     dosage: '',
@@ -25,6 +35,7 @@ const PharmacyForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log("Envoi des données:", formData);
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
         method: 'POST',
         headers: {
@@ -38,7 +49,10 @@ const PharmacyForm = () => {
       }
 
       alert('Demande envoyée avec succès !');
-      navigate('/dash'); // Redirection vers le dashboard après soumission
+      console.log("Redirection vers /dash");
+      
+      // Forcer la redirection
+      window.location.href = '/dash';
     } catch (error) {
       console.error('Erreur:', error);
       alert('Une erreur est survenue lors de l\'envoi de la demande');

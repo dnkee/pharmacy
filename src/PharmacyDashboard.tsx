@@ -55,6 +55,9 @@ function PharmacyDashboard() {
 
   const handleValidate = async (requestId: string) => {
     try {
+      console.log("Validation de la demande:", requestId);
+      console.log("URL API:", `${import.meta.env.VITE_API_URL}/api/requests/${requestId}`);
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests/${requestId}`, {
         method: 'PUT',
         headers: {
@@ -62,6 +65,8 @@ function PharmacyDashboard() {
         },
         body: JSON.stringify({ status: 'validated' }),
       });
+
+      console.log("Réponse:", response.status, response.statusText);
 
       if (!response.ok) {
         throw new Error('Erreur lors de la validation de la demande');
@@ -71,6 +76,8 @@ function PharmacyDashboard() {
       const updatedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
       const updatedData = await updatedResponse.json();
       setRequests(updatedData);
+      
+      alert('Demande validée avec succès !');
     } catch (err) {
       console.error('Erreur lors de la validation:', err);
       alert('Erreur lors de la validation de la demande');
