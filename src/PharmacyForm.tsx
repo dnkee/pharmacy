@@ -49,10 +49,7 @@ const PharmacyForm = () => {
       }
 
       alert('Demande envoyée avec succès !');
-      console.log("Redirection vers /dash");
-      
-      // Forcer la redirection
-      window.location.href = '/dash';
+     
     } catch (error) {
       console.error('Erreur:', error);
       alert('Une erreur est survenue lors de l\'envoi de la demande');
