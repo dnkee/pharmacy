@@ -72,12 +72,10 @@ function PharmacyDashboard() {
         throw new Error('Erreur lors de la validation de la demande');
       }
 
-      // Rafraîchir la liste des demandes
-      const updatedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
-      const updatedData = await updatedResponse.json();
-      setRequests(updatedData);
+      // Retirer la demande validée du tableau
+      setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
       
-      alert('Demande validée avec succès !');
+      alert('Demande validée avec succès ! Un email de confirmation a été envoyé au patient.');
     } catch (err) {
       console.error('Erreur lors de la validation:', err);
       alert('Erreur lors de la validation de la demande');
@@ -95,10 +93,10 @@ function PharmacyDashboard() {
           throw new Error('Erreur lors de la suppression de la demande');
         }
 
-        // Rafraîchir la liste des demandes
-        const updatedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`);
-        const updatedData = await updatedResponse.json();
-        setRequests(updatedData);
+        // Retirer la demande du tableau
+        setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
+        
+        alert('Demande supprimée avec succès !');
       } catch (err) {
         console.error('Erreur lors de la suppression:', err);
         alert('Erreur lors de la suppression de la demande');

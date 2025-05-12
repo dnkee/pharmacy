@@ -49,7 +49,11 @@ const PharmacyForm = () => {
       }
 
       alert('Demande envoyée avec succès !');
-     
+      
+      // Redirection
+      setTimeout(() => {
+        navigate('/dash');
+      }, 500);
     } catch (error) {
       console.error('Erreur:', error);
       alert('Une erreur est survenue lors de l\'envoi de la demande');
