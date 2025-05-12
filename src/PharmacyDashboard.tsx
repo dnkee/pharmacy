@@ -14,6 +14,10 @@ interface Request {
   date: string;
 }
 
+interface GroupedRequests {
+  [key: string]: Request[];
+}
+
 const NotesPopup: React.FC<{ notes: string; onClose: () => void }> = ({ notes, onClose }) => {
   return (
     <div className="popup-overlay" onClick={onClose}>
@@ -52,6 +56,8 @@ function PharmacyDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [selectedNotes, setSelectedNotes] = useState<string | null>(null);
   const [selectedInfo, setSelectedInfo] = useState<{ title: string; content: string } | null>(null);
+  const [isGrouped, setIsGrouped] = useState(false);
+  const [groupedRequests, setGroupedRequests] = useState<GroupedRequests>({});
 
   const handleValidate = async (requestId: string) => {
     try {
@@ -75,6 +81,11 @@ function PharmacyDashboard() {
       // Retirer la demande validée du tableau
       setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
       
+      // Mettre à jour les demandes groupées si nécessaire
+      if (isGrouped) {
+        updateGroupedRequests(requests.filter(request => request._id !== requestId));
+      }
+      
       alert('Demande validée avec succès ! Un email de confirmation a été envoyé au patient.');
     } catch (err) {
       console.error('Erreur lors de la validation:', err);
@@ -96,12 +107,35 @@ function PharmacyDashboard() {
         // Retirer la demande du tableau
         setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
         
+        // Mettre à jour les demandes groupées si nécessaire
+        if (isGrouped) {
+          updateGroupedRequests(requests.filter(request => request._id !== requestId));
+        }
+        
         alert('Demande supprimée avec succès !');
       } catch (err) {
         console.error('Erreur lors de la suppression:', err);
         alert('Erreur lors de la suppression de la demande');
       }
     }
+  };
+
+  const updateGroupedRequests = (reqs: Request[]) => {
+    const grouped: GroupedRequests = {};
+    reqs.forEach(request => {
+      if (!grouped[request.medicationName]) {
+        grouped[request.medicationName] = [];
+      }
+      grouped[request.medicationName].push(request);
+    });
+    setGroupedRequests(grouped);
+  };
+
+  const toggleGrouping = () => {
+    if (!isGrouped) {
+      updateGroupedRequests(requests);
+    }
+    setIsGrouped(!isGrouped);
   };
 
   useEffect(() => {
@@ -160,6 +194,71 @@ function PharmacyDashboard() {
     );
   }
 
+  const renderRequestRow = (request: Request) => (
+    <div key={request._id} className="request-row">
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Nom du patient', content: request.patientName })}>
+        {request.patientName}
+      </div>
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Email', content: request.patientEmail })}>
+        {request.patientEmail}
+      </div>
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Dosage', content: request.dosage })}>
+        {request.dosage}
+      </div>
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Médicament', content: request.medicationName })}>
+        {request.medicationName}
+      </div>
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Téléphone', content: request.patientPhone })}>
+        {request.patientPhone}
+      </div>
+      <div className={`urgency-badge ${getUrgencyColor(request.urgency)}`}>
+        {request.urgency === 'high' ? 'Urgent' : 
+         request.urgency === 'medium' ? 'Moyen' : 'Faible'}
+      </div>
+      <div className="clickable" onClick={() => setSelectedInfo({ title: 'Date', content: new Date(request.date).toLocaleDateString() })}>
+        {new Date(request.date).toLocaleDateString()}
+      </div>
+      <div className="notes-column">
+        <button 
+          className="notes-button"
+          onClick={() => setSelectedNotes(request.notes)}
+          title="Voir les notes"
+        >
+          📝
+        </button>
+      </div>
+      <div className="actions-column">
+        <div className="quick-actions">
+          <button 
+            className="validate-button"
+            onClick={() => handleValidate(request._id)}
+            title="Valider"
+          >
+            ✓
+          </button>
+          <button 
+            className="remove-button"
+            onClick={() => handleRemove(request._id)}
+            title="Retirer"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderGroupedRequests = () => {
+    return Object.entries(groupedRequests).map(([medicationName, reqs]) => (
+      <div key={medicationName} className="medication-group">
+        <div className="medication-header">
+          <h3>{medicationName} ({reqs.length})</h3>
+        </div>
+        {reqs.map(request => renderRequestRow(request))}
+      </div>
+    ));
+  };
+
   return (
     <div className="container">
       <div className="logo-container">
@@ -172,6 +271,12 @@ function PharmacyDashboard() {
 
       <div className="dashboard-header">
         <h1>Tableau de bord des demandes</h1>
+        <button 
+          className={`group-button ${isGrouped ? 'active' : ''}`} 
+          onClick={toggleGrouping}
+        >
+          {isGrouped ? 'Affichage Normal' : 'Regrouper par Médicament'}
+        </button>
       </div>
 
       <div className="requests-table">
@@ -186,59 +291,7 @@ function PharmacyDashboard() {
           <div>Notes</div>
           <div>Actions</div>
         </div>
-        {requests.map((request) => (
-          <div key={request._id} className="request-row">
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Nom du patient', content: request.patientName })}>
-              {request.patientName}
-            </div>
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Email', content: request.patientEmail })}>
-              {request.patientEmail}
-            </div>
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Dosage', content: request.dosage })}>
-              {request.dosage}
-            </div>
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Médicament', content: request.medicationName })}>
-              {request.medicationName}
-            </div>
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Téléphone', content: request.patientPhone })}>
-              {request.patientPhone}
-            </div>
-            <div className={`urgency-badge ${getUrgencyColor(request.urgency)}`}>
-              {request.urgency === 'high' ? 'Urgent' : 
-               request.urgency === 'medium' ? 'Moyen' : 'Faible'}
-            </div>
-            <div className="clickable" onClick={() => setSelectedInfo({ title: 'Date', content: new Date(request.date).toLocaleDateString() })}>
-              {new Date(request.date).toLocaleDateString()}
-            </div>
-            <div className="notes-column">
-              <button 
-                className="notes-button"
-                onClick={() => setSelectedNotes(request.notes)}
-                title="Voir les notes"
-              >
-                📝
-              </button>
-            </div>
-            <div className="actions-column">
-              <div className="quick-actions">
-                <button 
-                  className="validate-button"
-                  onClick={() => handleValidate(request._id)}
-                  title="Valider"
-                >
-                  ✓
-                </button>
-                <button 
-                  className="remove-button"
-                  onClick={() => handleRemove(request._id)}
-                  title="Retirer"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
+        {isGrouped ? renderGroupedRequests() : requests.map(request => renderRequestRow(request))}
       </div>
 
       {selectedNotes && (
