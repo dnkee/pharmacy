@@ -1,0 +1,11 @@
+.tarifs-page {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 2rem;
+}
+
+@media (max-width: 480px) {
+  .tarifs-page {
+    padding: 1rem;
+  }
+} 
