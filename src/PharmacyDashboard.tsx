@@ -122,13 +122,36 @@ function PharmacyDashboard() {
 
   const updateGroupedRequests = (reqs: Request[]) => {
     const grouped: GroupedRequests = {};
+    
+    // Fonction pour normaliser le nom du médicament
+    const normalizeMedicationName = (name: string): string => {
+      return name
+        .toLowerCase() // Convertir en minuscules
+        .replace(/[^a-z0-9]/g, '') // Supprimer les caractères spéciaux
+        .replace(/s$/, '') // Supprimer le 's' final
+        .trim(); // Supprimer les espaces
+    };
+
     reqs.forEach(request => {
-      if (!grouped[request.medicationName]) {
-        grouped[request.medicationName] = [];
+      const normalizedName = normalizeMedicationName(request.medicationName);
+      if (!grouped[normalizedName]) {
+        grouped[normalizedName] = [];
       }
-      grouped[request.medicationName].push(request);
+      grouped[normalizedName].push(request);
     });
-    setGroupedRequests(grouped);
+
+    // Convertir les clés normalisées en noms originaux pour l'affichage
+    const displayGrouped: GroupedRequests = {};
+    Object.entries(grouped).forEach(([normalizedName, requests]) => {
+      // Utiliser le nom le plus court comme clé d'affichage
+      const displayName = requests.reduce((shortest, current) => 
+        current.medicationName.length < shortest.length ? current.medicationName : shortest
+      , requests[0].medicationName);
+      
+      displayGrouped[displayName] = requests;
+    });
+
+    setGroupedRequests(displayGrouped);
   };
 
   const toggleGrouping = () => {
