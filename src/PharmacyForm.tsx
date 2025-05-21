@@ -23,6 +23,8 @@ const PharmacyForm = () => {
     urgency: 'low',
     notes: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,8 +36,10 @@ const PharmacyForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
-      console.log("Envoi des données:", formData);
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests`, {
         method: 'POST',
         headers: {
@@ -45,18 +49,26 @@ const PharmacyForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Erreur lors de l\'envoi des données');
+        throw new Error('Erreur lors de l\'envoi de la demande');
       }
 
-      alert('Demande envoyée avec succès !');
-      
-      // Redirection
-      setTimeout(() => {
-        navigate('/dash');
-      }, 500);
-    } catch (error) {
-      console.error('Erreur:', error);
-      alert('Une erreur est survenue lors de l\'envoi de la demande');
+      // Réinitialiser le formulaire
+      setFormData({
+        patientName: '',
+        medicationName: '',
+        dosage: '',
+        patientEmail: '',
+        patientPhone: '',
+        urgency: 'low',
+        notes: '',
+      });
+
+      // Afficher un message de succès
+      alert('Votre demande a été envoyée avec succès !');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    } finally {
+      setLoading(false);
     }
   };
 
