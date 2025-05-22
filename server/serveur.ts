@@ -56,14 +56,25 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
     to: email,
     subject: 'Confirmation de votre demande de médicament',
     html: `
-      <h2>Bonjour ${patientName},</h2>
-      <p>Nous avons bien reçu votre demande pour le médicament : <strong>${medicationName}</strong>.</p>
-      <p>Votre demande a été validée et le médicament sera ajouté à notre stock dans les plus brefs délais.</p>
-      <p>Nous vous contacterons dès que le médicament sera disponible.</p>
-      <br>
-      <p>Cordialement,</p>
-      <p>L'équipe de La Grande pharmacie de Paron</p>
-      <p>4 Av. Edme-Pierre Chauvot de Beauchêne, 89100 Paron</p>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+        <div style="background-color: #0066cc; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 24px;">La Grande pharmacie de Paron</h1>
+        </div>
+        <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h2 style="color: #333; margin-bottom: 20px;">Bonjour ${patientName},</h2>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons bien reçu votre demande pour le médicament :</p>
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <p style="color: #333; margin: 0;"><strong>Médicament :</strong> ${medicationName}</p>
+          </div>
+          <p style="color: #666; line-height: 1.6;">Votre demande a été validée et le médicament sera ajouté à notre stock dans les plus brefs délais.</p>
+          <p style="color: #666; line-height: 1.6;">Nous vous contacterons dès que le médicament sera disponible.</p>
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; margin: 0;">Cordialement,</p>
+            <p style="color: #333; font-weight: bold; margin: 5px 0;">L'équipe de La Grande pharmacie de Paron</p>
+            <p style="color: #666; margin: 5px 0;">4 Av. Edme-Pierre Chauvot de Beauchêne, 89100 Paron</p>
+          </div>
+        </div>
+      </div>
     `
   };
 
@@ -82,25 +93,43 @@ const sendAvailabilityEmail = async (email: string, patientName: string, medicat
     to: email,
     subject: 'Votre médicament est disponible',
     html: `
-      <h2>Bonjour ${patientName},</h2>
-      <p>Nous avons le plaisir de vous informer que votre médicament est maintenant disponible à la pharmacie.</p>
-      <p><strong>Détails de votre commande :</strong></p>
-      <ul>
-        <li>Médicament : ${medicationName}</li>
-        <li>Dosage : ${dosage}</li>
-      </ul>
-      <p>Vous pouvez venir le retirer à la pharmacie aux horaires d'ouverture habituels.</p>
-      <br>
-      <p>Cordialement,</p>
-      <p>L'équipe de La Grande pharmacie de Paron</p>
-      <p>4 Av. Edme-Pierre Chauvot de Beauchêne, 89100 Paron</p>
-      <p>Tél : 03 86 97 00 00</p>
-      <p>Horaires d'ouverture :</p>
-      <ul>
-        <li>Lundi - Vendredi : 8h30 - 19h30</li>
-        <li>Samedi : 8h30 - 19h00</li>
-        <li>Dimanche : 9h00 - 12h00</li>
-      </ul>
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+        <div style="background-color: #28a745; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 24px;">La Grande pharmacie de Paron</h1>
+        </div>
+        <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+          <h2 style="color: #333; margin-bottom: 20px;">Bonjour ${patientName},</h2>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons le plaisir de vous informer que votre médicament est maintenant disponible à la pharmacie.</p>
+          
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3 style="color: #333; margin-top: 0;">Détails de votre commande :</h3>
+            <ul style="color: #666; line-height: 1.6; margin: 0; padding-left: 20px;">
+              <li><strong>Médicament :</strong> ${medicationName}</li>
+              <li><strong>Dosage :</strong> ${dosage}</li>
+            </ul>
+          </div>
+
+          <div style="background-color: #e8f5e9; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3 style="color: #2e7d32; margin-top: 0;">Informations pratiques :</h3>
+            <p style="color: #666; margin: 5px 0;"><strong>Adresse :</strong> 4 Av. Edme-Pierre Chauvot de Beauchêne, 89100 Paron</p>
+            <p style="color: #666; margin: 5px 0;"><strong>Tél :</strong> 03 86 97 00 00</p>
+          </div>
+
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+            <h3 style="color: #333; margin-top: 0;">Horaires d'ouverture :</h3>
+            <ul style="color: #666; line-height: 1.6; margin: 0; padding-left: 20px;">
+              <li>Lundi - Vendredi : 8h30 - 19h30</li>
+              <li>Samedi : 8h30 - 19h00</li>
+              <li>Dimanche : 9h00 - 12h00</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+            <p style="color: #666; margin: 0;">Cordialement,</p>
+            <p style="color: #333; font-weight: bold; margin: 5px 0;">L'équipe de La Grande pharmacie de Paron</p>
+          </div>
+        </div>
+      </div>
     `
   };
 
@@ -194,7 +223,9 @@ app.post('/api/requests/:id/notify', async (req: ExpressRequest, res: Response) 
     );
 
     if (emailSent) {
-      res.json({ message: 'Email de notification envoyé avec succès' });
+      // Supprimer la demande après l'envoi réussi de l'email
+      await Request.findByIdAndDelete(req.params.id);
+      res.json({ message: 'Email de notification envoyé avec succès et demande supprimée' });
     } else {
       res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email' });
     }

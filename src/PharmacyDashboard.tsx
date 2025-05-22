@@ -219,6 +219,9 @@ function PharmacyDashboard() {
         throw new Error('Erreur lors de l\'envoi de la notification');
       }
 
+      // Mettre à jour la liste des demandes validées en retirant la demande notifiée
+      setValidatedRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
+      
       alert('Le patient a été notifié de la disponibilité du médicament !');
     } catch (err) {
       console.error('Erreur lors de la notification:', err);
