@@ -73,6 +73,7 @@ const ValidatedRequestsPopup: React.FC<{
                   <div className="request-info">
                     <p><strong>Patient:</strong> {request.patientName}</p>
                     <p><strong>Médicament:</strong> {request.medicationName}</p>
+                    <p><strong>Dosage:</strong> {request.dosage}</p>
                     <p><strong>Email:</strong> {request.patientEmail}</p>
                     <p><strong>Date de validation:</strong> {new Date(request.date).toLocaleDateString()}</p>
                   </div>
