@@ -75,6 +75,45 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
   }
 };
 
+// Fonction pour envoyer l'email de notification de disponibilité
+const sendAvailabilityEmail = async (email: string, patientName: string, medicationName: string, dosage: string) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Votre médicament est disponible',
+    html: `
+      <h2>Bonjour ${patientName},</h2>
+      <p>Nous avons le plaisir de vous informer que votre médicament est maintenant disponible à la pharmacie.</p>
+      <p><strong>Détails de votre commande :</strong></p>
+      <ul>
+        <li>Médicament : ${medicationName}</li>
+        <li>Dosage : ${dosage}</li>
+      </ul>
+      <p>Vous pouvez venir le retirer à la pharmacie aux horaires d'ouverture habituels.</p>
+      <br>
+      <p>Cordialement,</p>
+      <p>L'équipe de La Grande pharmacie de Paron</p>
+      <p>4 Av. Edme-Pierre Chauvot de Beauchêne, 89100 Paron</p>
+      <p>Tél : 03 86 97 00 00</p>
+      <p>Horaires d'ouverture :</p>
+      <ul>
+        <li>Lundi - Vendredi : 8h30 - 19h30</li>
+        <li>Samedi : 8h30 - 19h00</li>
+        <li>Dimanche : 9h00 - 12h00</li>
+      </ul>
+    `
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email de disponibilité envoyé avec succès');
+    return true;
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi de l\'email de disponibilité:', error);
+    return false;
+  }
+};
+
 // Route pour récupérer toutes les demandes
 app.get('/api/requests', async (req: ExpressRequest, res: Response) => {
   try {
@@ -132,6 +171,36 @@ app.delete('/api/requests/:id', async (req: ExpressRequest, res: Response) => {
   } catch (error) {
     console.error('Erreur lors de la suppression:', error);
     res.status(500).json({ message: 'Erreur lors de la suppression de la demande' });
+  }
+});
+
+// Route pour notifier la disponibilité
+app.post('/api/requests/:id/notify', async (req: ExpressRequest, res: Response) => {
+  try {
+    const request = await Request.findById(req.params.id);
+    if (!request) {
+      return res.status(404).json({ message: 'Demande non trouvée' });
+    }
+
+    if (!request.patientEmail || !request.patientName || !request.medicationName || !request.dosage) {
+      return res.status(400).json({ message: 'Informations manquantes pour l\'envoi de l\'email' });
+    }
+
+    const emailSent = await sendAvailabilityEmail(
+      request.patientEmail,
+      request.patientName,
+      request.medicationName,
+      request.dosage
+    );
+
+    if (emailSent) {
+      res.json({ message: 'Email de notification envoyé avec succès' });
+    } else {
+      res.status(500).json({ message: 'Erreur lors de l\'envoi de l\'email' });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la notification:', error);
+    res.status(500).json({ message: 'Erreur lors de la notification' });
   }
 });
 
