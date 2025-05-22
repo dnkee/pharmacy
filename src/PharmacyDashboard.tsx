@@ -12,6 +12,7 @@ interface Request {
   urgency: string;
   notes: string;
   date: string;
+  status?: string;
 }
 
 interface GroupedRequests {
@@ -50,14 +51,57 @@ const InfoPopup: React.FC<{ title: string; content: string; onClose: () => void 
   );
 };
 
+const ValidatedRequestsPopup: React.FC<{ 
+  requests: Request[]; 
+  onClose: () => void;
+  onNotifyAvailability: (requestId: string) => void;
+}> = ({ requests, onClose, onNotifyAvailability }) => {
+  return (
+    <div className="popup-overlay" onClick={onClose}>
+      <div className="popup-content" onClick={e => e.stopPropagation()}>
+        <div className="popup-header">
+          <h3>Demandes validées</h3>
+          <button className="close-button" onClick={onClose}>×</button>
+        </div>
+        <div className="popup-body">
+          {requests.length === 0 ? (
+            <p>Aucune demande validée</p>
+          ) : (
+            <div className="validated-requests-list">
+              {requests.map(request => (
+                <div key={request._id} className="validated-request-item">
+                  <div className="request-info">
+                    <p><strong>Patient:</strong> {request.patientName}</p>
+                    <p><strong>Médicament:</strong> {request.medicationName}</p>
+                    <p><strong>Email:</strong> {request.patientEmail}</p>
+                    <p><strong>Date de validation:</strong> {new Date(request.date).toLocaleDateString()}</p>
+                  </div>
+                  <button 
+                    className="notify-button"
+                    onClick={() => onNotifyAvailability(request._id)}
+                  >
+                    Notifier la disponibilité
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function PharmacyDashboard() {
   const [requests, setRequests] = useState<Request[]>([]);
+  const [validatedRequests, setValidatedRequests] = useState<Request[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedNotes, setSelectedNotes] = useState<string | null>(null);
   const [selectedInfo, setSelectedInfo] = useState<{ title: string; content: string } | null>(null);
   const [isGrouped, setIsGrouped] = useState(false);
   const [groupedRequests, setGroupedRequests] = useState<GroupedRequests>({});
+  const [showValidatedRequests, setShowValidatedRequests] = useState(false);
 
   const handleValidate = async (requestId: string) => {
     try {
@@ -161,6 +205,26 @@ function PharmacyDashboard() {
     setIsGrouped(!isGrouped);
   };
 
+  const handleNotifyAvailability = async (requestId: string) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/requests/${requestId}/notify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'envoi de la notification');
+      }
+
+      alert('Le patient a été notifié de la disponibilité du médicament !');
+    } catch (err) {
+      console.error('Erreur lors de la notification:', err);
+      alert('Erreur lors de l\'envoi de la notification');
+    }
+  };
+
   useEffect(() => {
     const fetchRequests = async () => {
       try {
@@ -171,7 +235,8 @@ function PharmacyDashboard() {
           throw new Error('Erreur lors de la récupération des données');
         }
         const data = await response.json();
-        setRequests(data);
+        setRequests(data.filter((req: Request) => req.status !== 'validated'));
+        setValidatedRequests(data.filter((req: Request) => req.status === 'validated'));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Une erreur est survenue');
         console.error('Erreur:', err);
@@ -294,12 +359,20 @@ function PharmacyDashboard() {
 
       <div className="dashboard-header">
         <h1>Tableau de bord des demandes</h1>
-        <button 
-          className={`group-button ${isGrouped ? 'active' : ''}`} 
-          onClick={toggleGrouping}
-        >
-          {isGrouped ? 'Affichage Normal' : 'Regrouper par Médicament'}
-        </button>
+        <div className="dashboard-actions">
+          <button 
+            className={`group-button ${isGrouped ? 'active' : ''}`} 
+            onClick={toggleGrouping}
+          >
+            {isGrouped ? 'Affichage Normal' : 'Regrouper par Médicament'}
+          </button>
+          <button 
+            className="validated-button"
+            onClick={() => setShowValidatedRequests(true)}
+          >
+            Voir les demandes validées ({validatedRequests.length})
+          </button>
+        </div>
       </div>
 
       <div className="requests-table">
@@ -328,6 +401,14 @@ function PharmacyDashboard() {
           title={selectedInfo.title}
           content={selectedInfo.content}
           onClose={() => setSelectedInfo(null)} 
+        />
+      )}
+
+      {showValidatedRequests && (
+        <ValidatedRequestsPopup 
+          requests={validatedRequests}
+          onClose={() => setShowValidatedRequests(false)}
+          onNotifyAvailability={handleNotifyAvailability}
         />
       )}
     </div>
