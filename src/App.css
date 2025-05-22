@@ -810,10 +810,11 @@ button:active {
 
 .dashboard-header h1 {
   color: var(--primary-color);
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   font-weight: 600;
   margin: 0;
   text-align: center;
+  white-space: nowrap;
 }
 
 .group-button {
@@ -868,5 +869,23 @@ button:active {
   
   .group-button {
     width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-header h1 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header h1 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header h1 {
+    font-size: 1.1rem;
   }
 }
