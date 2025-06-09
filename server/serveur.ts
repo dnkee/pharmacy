@@ -102,7 +102,7 @@ const sendAvailabilityEmail = async (email: string, patientName: string, medicat
           <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons le plaisir de vous informer que votre médicament est maintenant disponible à la pharmacie.</p>
           
           <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-            <h3 style="color: #333; margin-top: 0;">Détails de votre commande :</h3>
+            <h3 style="color: #333; margin-top: 0;">Détails de votre demande :</h3>
             <ul style="color: #666; line-height: 1.6; margin: 0; padding-left: 20px;">
               <li><strong>Médicament :</strong> ${medicationName}</li>
               <li><strong>Dosage :</strong> ${dosage}</li>
