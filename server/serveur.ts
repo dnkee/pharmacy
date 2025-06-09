@@ -66,8 +66,8 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
           <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
             <p style="color: #333; margin: 0;"><strong>Produit :</strong> ${medicationName}</p>
           </div>
-          <p style="color: #666; line-height: 1.6;">Votre demande a été validée et le produit sera ajouté à notre stock dans les plus brefs délais.</p>
-          <p style="color: #666; line-height: 1.6;">Nous vous contacterons dès que le produit sera disponible.</p>
+          <p style="color: #666; line-height: 1.6;">Nous avons bien reçu votre demande. Si le produit est intégré en stock, nous vous recontacterons par mail.</p>
+         
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; margin: 0;">Cordialement,</p>
             <p style="color: #333; font-weight: bold; margin: 5px 0;">L'équipe de La Grande pharmacie de Paron</p>
