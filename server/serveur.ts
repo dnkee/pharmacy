@@ -42,10 +42,15 @@ const Request = mongoose.model('Request', requestSchema);
 
 // Configuration de nodemailer
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'smtp.orange.fr',
+  port: 587,
+  secure: false, // true pour le port 465, false pour les autres ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD
+  },
+  tls: {
+    rejectUnauthorized: false
   }
 });
 
