@@ -42,26 +42,15 @@ const Request = mongoose.model('Request', requestSchema);
 
 // Configuration de nodemailer
 const transporter = nodemailer.createTransport({
-  host: 'smtp.orange.fr',
-  port: 587,
-  secure: false,
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
-  },
-  tls: {
-    rejectUnauthorized: false
-  },
-  debug: true,
-  logger: true
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD
+  }
 });
 
 // Fonction pour envoyer l'email de confirmation
 const sendConfirmationEmail = async (email: string, patientName: string, medicationName: string) => {
-  console.log('Tentative d\'envoi d\'email avec la configuration suivante:');
-  console.log('From:', process.env.EMAIL_USER);
-  console.log('To:', email);
-  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -90,26 +79,15 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
   };
 
   try {
-    console.log('Vérification de la connexion SMTP...');
-    await transporter.verify();
-    console.log('Connexion SMTP réussie');
-    
-    console.log('Envoi de l\'email...');
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email envoyé avec succès:', info);
-    return true;
+    await transporter.sendMail(mailOptions);
+    console.log('Email de confirmation envoyé avec succès');
   } catch (error) {
-    console.error('Erreur détaillée lors de l\'envoi de l\'email:', error);
-    return false;
+    console.error('Erreur lors de l\'envoi de l\'email:', error);
   }
 };
 
 // Fonction pour envoyer l'email de notification de disponibilité
 const sendAvailabilityEmail = async (email: string, patientName: string, medicationName: string, dosage: string) => {
-  console.log('Tentative d\'envoi d\'email de disponibilité avec la configuration suivante:');
-  console.log('From:', process.env.EMAIL_USER);
-  console.log('To:', email);
-  
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -156,16 +134,11 @@ const sendAvailabilityEmail = async (email: string, patientName: string, medicat
   };
 
   try {
-    console.log('Vérification de la connexion SMTP...');
-    await transporter.verify();
-    console.log('Connexion SMTP réussie');
-    
-    console.log('Envoi de l\'email...');
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email envoyé avec succès:', info);
+    await transporter.sendMail(mailOptions);
+    console.log('Email de disponibilité envoyé avec succès');
     return true;
   } catch (error) {
-    console.error('Erreur détaillée lors de l\'envoi de l\'email:', error);
+    console.error('Erreur lors de l\'envoi de l\'email de disponibilité:', error);
     return false;
   }
 };
