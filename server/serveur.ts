@@ -54,7 +54,7 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Confirmation de votre demande de médicament',
+    subject: 'Confirmation de votre demande de produit',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
         <div style="background-color: #0066cc; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
@@ -62,12 +62,12 @@ const sendConfirmationEmail = async (email: string, patientName: string, medicat
         </div>
         <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
           <h2 style="color: #333; margin-bottom: 20px;">Bonjour ${patientName},</h2>
-          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons bien reçu votre demande pour le médicament :</p>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons bien reçu votre demande pour le produit :</p>
           <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
-            <p style="color: #333; margin: 0;"><strong>Médicament :</strong> ${medicationName}</p>
+            <p style="color: #333; margin: 0;"><strong>Produit :</strong> ${medicationName}</p>
           </div>
-          <p style="color: #666; line-height: 1.6;">Votre demande a été validée et le médicament sera ajouté à notre stock dans les plus brefs délais.</p>
-          <p style="color: #666; line-height: 1.6;">Nous vous contacterons dès que le médicament sera disponible.</p>
+          <p style="color: #666; line-height: 1.6;">Votre demande a été validée et le produit sera ajouté à notre stock dans les plus brefs délais.</p>
+          <p style="color: #666; line-height: 1.6;">Nous vous contacterons dès que le produit sera disponible.</p>
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="color: #666; margin: 0;">Cordialement,</p>
             <p style="color: #333; font-weight: bold; margin: 5px 0;">L'équipe de La Grande pharmacie de Paron</p>
@@ -91,7 +91,7 @@ const sendAvailabilityEmail = async (email: string, patientName: string, medicat
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Votre médicament est disponible',
+    subject: 'Votre produit est disponible',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
         <div style="background-color: #28a745; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
@@ -99,12 +99,12 @@ const sendAvailabilityEmail = async (email: string, patientName: string, medicat
         </div>
         <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
           <h2 style="color: #333; margin-bottom: 20px;">Bonjour ${patientName},</h2>
-          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons le plaisir de vous informer que votre médicament est maintenant disponible à la pharmacie.</p>
+          <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">Nous avons le plaisir de vous informer que votre produit est maintenant disponible à la pharmacie.</p>
           
           <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
             <h3 style="color: #333; margin-top: 0;">Détails de votre demande :</h3>
             <ul style="color: #666; line-height: 1.6; margin: 0; padding-left: 20px;">
-              <li><strong>Médicament :</strong> ${medicationName}</li>
+              <li><strong>Produit :</strong> ${medicationName}</li>
               <li><strong>Dosage :</strong> ${dosage}</li>
             </ul>
           </div>
